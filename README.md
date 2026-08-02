@@ -264,6 +264,3 @@ This project is licensed under the MIT License — see [LICENSE](LICENSE) for de
 
 ---
 
-<div align="center">
-Made with ₹0 | Woxsen University | Capstone Project-I | 2026–27
-</div>
