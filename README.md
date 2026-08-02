@@ -252,14 +252,9 @@ This project is submitted as Capstone Project-I at Woxsen University, School of 
 
 ## Team
 
-| Name | Roll No | Role |
-|---|---|---|
-| Palla Chetana Reddy | 23WU0104050 | Causal AI + Architecture |
-| Varshini Yadav Nasaram | 23WU0104067 | Anomaly Detection + Backend |
-| Obulagari Nandini | 23WU0104049 | Agents + Frontend |
-
-**Faculty Mentor:** Dr. K RajKumar
-**Institution:** Woxsen University, School of Technology, Hyderabad
+- Palla Chetana Reddy
+- Varshini Yadav Nasaram
+- Obulagari Nandini
 
 ---
 
