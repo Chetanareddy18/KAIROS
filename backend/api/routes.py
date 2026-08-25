@@ -103,6 +103,42 @@ def alert_history(p=Depends(_pipeline)):
     return {"history": p.messenger.get_history()}
 
 
+# ── Sample Data Seed (dev only) ───────────────────────────────────────────────
+
+@router.post("/dev/seed")
+def seed_sample_data(p=Depends(_pipeline)):
+    import numpy as np
+    import pandas as pd
+
+    rng     = np.random.default_rng(42)
+    periods = 336
+    ts      = pd.date_range(end=pd.Timestamp.now(tz="UTC"), periods=periods, freq="h")
+
+    def spikes(arr, n=6):
+        idx = rng.choice(len(arr), n, replace=False)
+        arr[idx] *= rng.uniform(2.5, 4.0, n)
+        return arr
+
+    base = {
+        "daily_revenue":       rng.normal(50_000, 2000, periods),
+        "order_count":         rng.normal(300, 15, periods),
+        "avg_order_value":     rng.normal(165, 8, periods),
+        "customer_churn_rate": rng.normal(2.1, 0.15, periods),
+        "cart_abandonment":    rng.normal(68, 3, periods),
+        "nps_score":           rng.normal(42, 2, periods),
+    }
+    rows = []
+    for name, values in base.items():
+        values = spikes(np.abs(values))
+        for t, v in zip(ts, values):
+            rows.append(("sample_data", name, float(v), t))
+
+    df = pd.DataFrame(rows, columns=["source", "metric_name", "value", "timestamp"])
+    df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
+    p.collector._store(df)
+    return {"seeded": len(df), "metrics": list(base.keys())}
+
+
 # ── Full Pipeline ─────────────────────────────────────────────────────────────
 
 @router.post("/pipeline/run")

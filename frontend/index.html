@@ -4,6 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KAIROS — Business Intelligence Agent</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              teal: { DEFAULT: '#1E7A78', dark: '#0D3D3C', light: '#EAF5F5' },
+              sand: { DEFAULT: '#D4B896', light: '#F7F5F0' },
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body { background-color: #F7F5F0; font-family: 'Segoe UI', system-ui, sans-serif; }
+    </style>
   </head>
   <body>
     <div id="root"></div>

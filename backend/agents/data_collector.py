@@ -23,7 +23,10 @@ class DataCollectorAgent:
     def __init__(self, db_path: str = "kairos.duckdb"):
         self.conn       = duckdb.connect(db_path)
         self.connectors: list = []
-        self.conn.executescript(_SCHEMA)
+        for stmt in _SCHEMA.strip().split(";"):
+            stmt = stmt.strip()
+            if stmt:
+                self.conn.execute(stmt)
 
     def register(self, connector) -> None:
         self.connectors.append(connector)
