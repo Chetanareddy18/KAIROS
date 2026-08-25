@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  backend:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://kairos:kairos@postgres:5432/kairos
+      OLLAMA_URL:   http://host.docker.internal:11434
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./kairos.duckdb:/app/kairos.duckdb
+      - ./docs:/app/docs
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB:       kairos
+      POSTGRES_USER:     kairos
+      POSTGRES_PASSWORD: kairos
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kairos"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
