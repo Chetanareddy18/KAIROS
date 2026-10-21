@@ -1,0 +1,113 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#EEF2F1;font-family:Sora,Arial,sans-serif;color:#0B2B2A}
+  .grid{display:grid;grid-template-columns:repeat(3,420px);gap:28px;padding:36px}
+  .card{background:#fff;border-radius:22px;padding:26px;box-shadow:0 2px 10px #0001}
+  .card.dark{background:#071C1C;color:#E6F4F2}
+  .mark{width:220px;height:220px;display:block;margin:6px auto 14px}
+  h3{margin:0 0 4px;font-size:18px} p{margin:0;font-size:13px;opacity:.7}
+  .small{display:flex;gap:14px;align-items:center;justify-content:center;margin-top:14px}
+  .small svg{width:32px;height:32px}.small svg.m{width:56px;height:56px}
+  .word{display:flex;align-items:center;gap:18px;justify-content:center;padding:10px 0}
+  .word svg{width:84px;height:84px}
+  .word b{font-family:Sora;font-weight:700;font-size:46px;letter-spacing:.2em}
+  .word small{display:block;font-family:'Space Grotesk';font-weight:500;font-size:13px;letter-spacing:.32em;opacity:.65;margin-top:2px}
+  .wide{grid-column:span 3;display:flex;gap:28px}
+  .wide .card{flex:1}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0E4F4D"/><stop offset="1" stop-color="#1E9A93"/></linearGradient>
+    <linearGradient id="g2" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#16857F"/><stop offset="1" stop-color="#3FE0C5"/></linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD873"/><stop offset="1" stop-color="#F5A524"/></linearGradient>
+    <radialGradient id="glow"><stop offset="0" stop-color="#FFC857" stop-opacity=".55"/><stop offset="1" stop-color="#FFC857" stop-opacity="0"/></radialGradient>
+
+    <!-- 1 ORIGIN K -->
+    <symbol id="m1" viewBox="0 0 240 240">
+      <rect width="240" height="240" rx="58" fill="url(#g1)"/>
+      <rect x="62" y="52" width="32" height="136" rx="9" fill="#fff"/>
+      <path d="M120 120 L170 62" stroke="#fff" stroke-width="30" stroke-linecap="round"/>
+      <path d="M120 120 L174 182" stroke="#fff" stroke-width="30" stroke-linecap="round"/>
+      <circle cx="112" cy="120" r="21" fill="url(#gold)" stroke="#11605D" stroke-width="8"/>
+    </symbol>
+
+    <!-- 2 TRACE-BACK K: arms are an arrowhead pointing back at the root -->
+    <symbol id="m2" viewBox="0 0 240 240">
+      <rect width="240" height="240" rx="58" fill="#06201F"/>
+      <rect x="58" y="50" width="30" height="140" rx="7" fill="url(#g2)"/>
+      <polyline points="172,62 108,120 172,178" fill="none" stroke="url(#g2)" stroke-width="28" stroke-linejoin="miter" stroke-miterlimit="10"/>
+      <circle cx="186" cy="48" r="13" fill="#3FE0C5" opacity=".9"/>
+      <circle cx="186" cy="192" r="13" fill="#3FE0C5" opacity=".55"/>
+      <circle cx="100" cy="120" r="34" fill="url(#glow)"/>
+      <circle cx="101" cy="120" r="9" fill="#FFD873"/>
+    </symbol>
+
+    <!-- 3 PULSE K: upper arm is a KPI line that spikes -->
+    <symbol id="m3" viewBox="0 0 240 240">
+      <rect width="240" height="240" rx="58" fill="url(#g1)"/>
+      <rect x="58" y="52" width="30" height="136" rx="8" fill="#fff"/>
+      <path d="M104 124 L176 186" stroke="#fff" stroke-width="28" stroke-linecap="round"/>
+      <path d="M104 124 L128 100 L146 116 L182 66" fill="none" stroke="#fff" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="184" cy="62" r="15" fill="url(#gold)"/>
+    </symbol>
+
+    <!-- 4 FACETED K: folded ribbon monogram -->
+    <symbol id="m4" viewBox="0 0 240 240">
+      <rect width="240" height="240" rx="58" fill="#06201F"/>
+      <polygon points="58,48 92,48 92,192 58,192" fill="#1E9A93"/>
+      <polygon points="92,132 156,48 198,48 92,186" fill="#3FE0C5"/>
+      <polygon points="122,112 198,192 156,192 101,134" fill="#147A74"/>
+      <polygon points="92,132 101,134 112,121" fill="#0B4A47"/>
+    </symbol>
+
+    <!-- 5 CLOCK K: the K is the hands of a clock, the moment = kairos -->
+    <symbol id="m5" viewBox="0 0 240 240">
+      <rect width="240" height="240" rx="58" fill="#06201F"/>
+      <circle cx="120" cy="120" r="88" fill="none" stroke="url(#g2)" stroke-width="12" stroke-dasharray="470 83" transform="rotate(-38 120 120)" stroke-linecap="round"/>
+      <rect x="74" y="66" width="24" height="108" rx="7" fill="#E9FBF7"/>
+      <path d="M116 120 L170 66" stroke="#E9FBF7" stroke-width="22" stroke-linecap="round"/>
+      <path d="M116 120 L160 166" stroke="#E9FBF7" stroke-width="22" stroke-linecap="round"/>
+      <circle cx="112" cy="120" r="13" fill="url(#gold)" stroke="#06201F" stroke-width="6"/>
+    </symbol>
+
+    <!-- 6 NETWORK K: K drawn as a causal graph, origin glowing -->
+    <symbol id="m6" viewBox="0 0 240 240">
+      <rect width="240" height="240" rx="58" fill="url(#g1)"/>
+      <g stroke="#fff" stroke-width="11" stroke-linecap="round" opacity=".95">
+        <line x1="76" y1="62" x2="76" y2="178"/>
+        <line x1="76" y1="120" x2="166" y2="62"/>
+        <line x1="76" y1="120" x2="166" y2="178"/>
+        <line x1="121" y1="91" x2="166" y2="120" opacity=".45"/>
+      </g>
+      <g fill="#fff">
+        <circle cx="76" cy="62" r="16"/><circle cx="76" cy="178" r="16"/>
+        <circle cx="166" cy="62" r="16"/><circle cx="166" cy="178" r="16"/>
+        <circle cx="121" cy="91" r="11"/><circle cx="166" cy="120" r="11" opacity=".7"/>
+      </g>
+      <circle cx="76" cy="120" r="21" fill="url(#gold)" stroke="#13625F" stroke-width="7"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="grid" id="g"></div>
+<script>
+const items=[
+ ['m1','1 · Origin K','The arms branch out from a glowing node: the root cause everything flows from.',0],
+ ['m2','2 · Trace-Back K','The arms form an arrowhead pointing back at the stem: effects traced back to the cause.',1],
+ ['m3','3 · Pulse K','The upper arm is a live KPI line spiking: monitoring that never sleeps.',0],
+ ['m4','4 · Faceted K','A folded-ribbon monogram. Premium and timeless, like a fintech brand.',1],
+ ['m5','5 · Moment K','The K is the hands of a clock: kairos, the right moment to act.',1],
+ ['m6','6 · Network K','The K drawn as a causal graph, with the origin node in gold.',0],
+];
+const g=document.getElementById('g');
+for(const [id,t,d,dark] of items){
+  g.insertAdjacentHTML('beforeend',`<div class="card ${dark?'dark':''}"><h3>${t}</h3><p>${d}</p>
+  <svg class="mark"><use href="#${id}"/></svg>
+  <div class="small"><svg class="m"><use href="#${id}"/></svg><svg><use href="#${id}"/></svg><span style="font-size:11px;opacity:.6">← favicon size</span></div></div>`);
+}
+const lock=(id)=>`<div class="word"><svg><use href="#${id}"/></svg><div><b>KAIROS</b><small>CAUSAL INTELLIGENCE</small></div></div>`;
+g.insertAdjacentHTML('beforeend',`<div class="wide"><div class="card">${lock('m1')}</div><div class="card dark">${lock('m2')}</div></div>`);
+</script>
+</body></html>

@@ -1,0 +1,70 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#F3EEE3;--ink:#16211F;--soft:#6B726E;--rule:#CFC6B4;--accent:#0F5A55;--root:#B4461F}
+  *{box-sizing:border-box}
+  body{margin:0;width:1200px;height:1200px;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',Arial,sans-serif}
+  .wrap{padding:70px 80px 64px;height:100%;display:flex;flex-direction:column}
+  .top{display:flex;justify-content:space-between;align-items:baseline;font-size:17px;letter-spacing:.06em;color:var(--soft);border-bottom:2px solid var(--ink);padding-bottom:16px}
+  .top b{font-family:Fraunces;font-weight:900;font-size:26px;letter-spacing:.3em;color:var(--ink)}
+  .top i{font-family:Fraunces;font-style:italic;font-size:21px;letter-spacing:0;color:var(--ink)}
+  h1{font-family:Fraunces;font-weight:700;font-size:100px;line-height:.98;letter-spacing:-.025em;margin:48px 0 0}
+  h1 em{font-style:italic;font-weight:500;color:var(--accent)}
+  h1 .c{font-style:italic;font-weight:500;color:var(--soft)}
+  .cols{display:grid;grid-template-columns:350px 1fr;gap:0;margin-top:70px;border-top:1px solid var(--rule)}
+  .col{padding-top:26px}
+  .col.l{padding-right:40px;border-right:1px solid var(--rule)}
+  .col.r{padding-left:44px}
+  .lab{font-size:15px;letter-spacing:.18em;font-weight:600;color:var(--soft)}
+  .lab span{font-family:Fraunces;font-style:italic;letter-spacing:0;font-weight:500;font-size:19px;margin-left:6px;text-transform:none}
+  .stamp{font-family:'IBM Plex Mono';font-size:20px;color:var(--soft);margin-top:30px}
+  .quote{font-family:Fraunces;font-size:52px;line-height:1.1;font-weight:500;margin-top:10px}
+  .quote b{color:var(--root);font-weight:700}
+  .note{font-size:22px;color:var(--soft);margin-top:24px;line-height:1.45}
+  ol{list-style:none;margin:22px 0 0;padding:0;position:relative}
+  ol::before{content:"";position:absolute;left:8px;top:22px;bottom:22px;width:2px;background:var(--ink);opacity:.8}
+  li{display:grid;grid-template-columns:30px 1fr auto;align-items:baseline;padding:21px 0;position:relative}
+  li::before{content:"";width:18px;height:18px;border-radius:50%;border:2px solid var(--ink);background:var(--paper);position:relative;top:2px;z-index:1}
+  li.root::before{background:var(--root);border-color:var(--root)}
+  li .n{font-size:30px;font-weight:600}
+  li.root .n{color:var(--root)}
+  li .n small{font-family:Fraunces;font-style:italic;font-weight:500;font-size:20px;margin-left:10px}
+  li .v{font-family:'IBM Plex Mono';font-size:21px;color:var(--soft)}
+  li .v b{color:var(--ink);font-weight:600}
+  .t{font-family:'IBM Plex Mono';font-size:15px;color:var(--soft);display:block;margin-top:2px;font-weight:400}
+  .names{margin-top:auto;margin-bottom:26px;font-family:Fraunces;font-style:italic;font-weight:500;font-size:28px;color:var(--ink)}
+  .names small{display:block;font-size:21px;color:var(--soft);margin-top:8px}
+  .names i{color:var(--rule);margin:0 14px;font-style:normal}
+  .foot{display:flex;justify-content:space-between;align-items:baseline;border-top:2px solid var(--ink);padding-top:18px}
+  .foot p{margin:0;font-family:Fraunces;font-size:30px;font-weight:500}
+  .foot p em{color:var(--accent)}
+  .foot span{font-size:16px;letter-spacing:.14em;color:var(--soft)}
+</style></head>
+<body><div class="wrap">
+  <div class="top"><b>KAIROS</b><i>kairos (n.) — the opportune moment to act</i></div>
+
+  <h1>Dashboards live in <span class="c">chronos</span>.<br>We built for <em>kairos</em>.</h1>
+
+  <div class="cols">
+    <div class="col l">
+      <div class="lab">CHRONOS<span>clock time</span></div>
+      <div class="stamp">MON · 09:00</div>
+      <div class="quote">“Customer churn is up <b>51.8%</b>.”</div>
+      <div class="note">That's all the dashboard knows. Now someone spends the day finding out why.</div>
+    </div>
+    <div class="col r">
+      <div class="lab">KAIROS<span>the right moment</span></div>
+      <ol>
+        <li class="root"><span class="n">Delivery delays<small>root cause</small><span class="t">4 hours earlier</span></span><span class="v"><b>1.5 → 4.2</b> hrs</span></li>
+        <li><span class="n">Support tickets</span><span class="v"><b>54 → 115</b></span></li>
+        <li><span class="n">Response time</span><span class="v"><b>3.7 → 7.5</b> hrs</span></li>
+        <li><span class="n">NPS</span><span class="v"><b>38.9 → 20.5</b></span></li>
+        <li><span class="n">Customer churn</span><span class="v"><b>2.3 → 3.6</b> %</span></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="names">Palla Chetana Reddy <i>|</i> Varshini Yadav Nasaram <i>|</i> Obulagari Nandini<small>Guided by Dr. Rajkumar Kalimuthu</small></div>
+  <div class="foot"><p>Not just <em>what</em> happened. <em>Why</em> — while there's still time.</p><span>CAUSAL BI AGENT</span></div>
+</div></body></html>

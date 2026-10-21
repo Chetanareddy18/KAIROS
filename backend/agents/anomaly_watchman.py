@@ -1,11 +1,25 @@
-"""Agent 2: Anomaly Watchman — Prophet + Z-Score temporal anomaly detection."""
+"""Agent 2: Anomaly Watchman — seasonal robust z-score + Prophet ensemble.
+
+Every detected anomaly is persisted (primary key source+metric+timestamp), so a
+point is reported as *new* exactly once — the pipeline alerts on new anomalies
+only, never on the same historical spike every 15 minutes.
+"""
+from __future__ import annotations
+
 import logging
-from dataclasses import dataclass
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import asdict, dataclass
 from datetime import datetime
 
 import pandas as pd
 
+from backend.config import settings
+from backend.db import Database, get_db
+from backend.models.anomaly import AnomalyDetectionPipeline, SEVERITY_ORDER
+
 logger = logging.getLogger("kairos.agent2")
+
+_MAX_POINTS = 5000    # detection window per series (most recent points)
 
 
 @dataclass
@@ -15,98 +29,141 @@ class AnomalyResult:
     timestamp:       datetime
     observed_value:  float
     expected_value:  float
-    deviation_score: float
-    method:          str       # "prophet" | "zscore"
+    deviation_score: float     # signed, robust sigmas
+    method:          str       # "robust_z" | "prophet" | "prophet+robust_z"
     severity:        str       # "low" | "medium" | "high" | "critical"
+    is_new:          bool = False
+
+    def to_dict(self) -> dict:
+        d = asdict(self)
+        d["timestamp"] = pd.Timestamp(self.timestamp).isoformat()
+        return d
 
 
 class AnomalyWatchmanAgent:
-    def __init__(self, db_path: str = "kairos.duckdb", z_threshold: float = 3.0):
-        import duckdb
-        self.conn        = duckdb.connect(db_path)
-        self.z_threshold = z_threshold
+    def __init__(self, db: Database | str | None = None, z_threshold: float | None = None,
+                 use_prophet: bool | None = None):
+        self.db = db if isinstance(db, Database) else get_db(db) if isinstance(db, str) else get_db()
+        self.z_threshold = z_threshold if z_threshold is not None else settings.z_threshold
+        self.detector = AnomalyDetectionPipeline(
+            z_threshold=self.z_threshold,
+            use_prophet=settings.use_prophet if use_prophet is None else use_prophet,
+        )
 
-    def detect(self) -> list[AnomalyResult]:
-        pairs = self.conn.execute(
-            "SELECT DISTINCT metric_name, source FROM metrics"
-        ).fetchall()
-        anomalies: list[AnomalyResult] = []
-        for metric_name, source in pairs:
-            df = self.conn.execute(
-                "SELECT timestamp, value FROM metrics "
-                "WHERE metric_name = ? AND source = ? ORDER BY timestamp",
-                [metric_name, source],
-            ).df()
-            if len(df) < 10:
-                continue
-            anomalies.extend(self._analyse(df, metric_name, source))
-        logger.info("Watchman: %d anomalies across %d metrics", len(anomalies), len(pairs))
-        return anomalies
+    def detect(self, persist: bool = True) -> list[AnomalyResult]:
+        """Scan every series; returns all anomalies found, with `is_new` marking first sightings."""
+        pairs = self.db.execute("SELECT DISTINCT source, metric_name FROM metrics")
+        series = {}
+        for source, metric in pairs:
+            df = self.db.df(
+                "SELECT timestamp, value FROM metrics WHERE source = ? AND metric_name = ? "
+                "ORDER BY timestamp DESC LIMIT ?",
+                [source, metric, _MAX_POINTS],
+            )
+            if len(df) >= 10:
+                series[(source, metric)] = df.sort_values("timestamp")
 
-    def _analyse(self, df: pd.DataFrame, metric: str, source: str) -> list[AnomalyResult]:
-        results: list[AnomalyResult] = []
-        if len(df) >= 30:
-            results.extend(self._prophet(df, metric, source))
-        results.extend(self._zscore(df, metric, source))
-        # deduplicate by timestamp, prefer prophet
-        seen: set = set()
-        unique   = []
-        for r in results:
-            key = (r.metric_name, str(r.timestamp))
-            if key not in seen:
-                seen.add(key)
-                unique.append(r)
-        return unique
-
-    def _prophet(self, df: pd.DataFrame, metric: str, source: str) -> list[AnomalyResult]:
-        try:
-            from prophet import Prophet
-            pdf = df.rename(columns={"timestamp": "ds", "value": "y"})
-            pdf["ds"] = pd.to_datetime(pdf["ds"]).dt.tz_localize(None)
-            m = Prophet(interval_width=0.99, weekly_seasonality=True, yearly_seasonality=False)
-            m.fit(pdf)
-            forecast  = m.predict(pdf[["ds"]])
-            merged    = pdf.merge(forecast[["ds", "yhat", "yhat_lower", "yhat_upper"]], on="ds")
-            bad       = merged[(merged["y"] < merged["yhat_lower"]) | (merged["y"] > merged["yhat_upper"])]
+        def analyse(item):
+            (source, metric), df = item
+            s = pd.Series(df["value"].to_numpy(), index=pd.DatetimeIndex(df["timestamp"]))
             return [
                 AnomalyResult(
-                    metric_name=metric, source=source,
-                    timestamp=row["ds"],
-                    observed_value=row["y"], expected_value=row["yhat"],
-                    deviation_score=abs(row["y"] - row["yhat"]) / (abs(row["yhat"]) + 1e-9),
-                    method="prophet",
-                    severity=self._severity(
-                        abs(row["y"] - row["yhat"]) / (row["yhat_upper"] - row["yhat_lower"] + 1e-9)
-                    ),
+                    metric_name=metric, source=source, timestamp=p.timestamp,
+                    observed_value=p.value, expected_value=p.expected,
+                    deviation_score=round(p.score, 3), method=p.method, severity=p.severity,
                 )
-                for _, row in bad.iterrows()
+                for p in self.detector.detect(s)
             ]
-        except Exception as e:
-            logger.warning("Prophet failed for '%s': %s", metric, e)
-            return []
 
-    def _zscore(self, df: pd.DataFrame, metric: str, source: str) -> list[AnomalyResult]:
-        values        = df["value"]
-        mean, std     = values.mean(), values.std()
-        if std == 0:
-            return []
-        z = (values - mean) / std
+        anomalies: list[AnomalyResult] = []
+        # Prophet releases the GIL while sampling, so a small pool helps on many series
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            for found in pool.map(analyse, series.items()):
+                anomalies.extend(found)
+
+        if persist and anomalies:
+            self._persist(anomalies)
+        logger.info("Watchman: %d anomalies (%d new) across %d series",
+                    len(anomalies), sum(a.is_new for a in anomalies), len(series))
+        return anomalies
+
+    def _persist(self, anomalies: list[AnomalyResult]) -> None:
+        frame = pd.DataFrame([{
+            "source": a.source, "metric_name": a.metric_name, "timestamp": pd.Timestamp(a.timestamp),
+            "observed_value": a.observed_value, "expected_value": a.expected_value,
+            "deviation_score": a.deviation_score, "severity": a.severity, "method": a.method,
+        } for a in anomalies])
+        frame["timestamp"] = pd.to_datetime(frame["timestamp"], utc=True)
+        with self.db.locked() as conn:
+            existing = conn.execute("SELECT source, metric_name, timestamp FROM anomalies").df()
+            keys = set()
+            if not existing.empty:
+                existing["timestamp"] = pd.to_datetime(existing["timestamp"], utc=True)
+                keys = set(zip(existing["source"], existing["metric_name"], existing["timestamp"]))
+            for a, ts in zip(anomalies, frame["timestamp"]):
+                a.is_new = (a.source, a.metric_name, ts) not in keys
+            conn.register("_kairos_anom", frame)
+            try:
+                conn.execute(
+                    "INSERT INTO anomalies (source, metric_name, timestamp, observed_value, expected_value, "
+                    "deviation_score, severity, method) "
+                    "SELECT source, metric_name, timestamp, observed_value, expected_value, deviation_score, "
+                    "severity, method FROM _kairos_anom "
+                    "ON CONFLICT (source, metric_name, timestamp) DO UPDATE SET "
+                    "observed_value = excluded.observed_value, expected_value = excluded.expected_value, "
+                    "deviation_score = excluded.deviation_score, severity = excluded.severity, "
+                    "method = excluded.method"
+                )
+            finally:
+                conn.unregister("_kairos_anom")
+
+    # ── reads (dashboard) ────────────────────────────────────────────────────
+
+    def list_anomalies(self, severity: str | None = None, source: str | None = None,
+                       metric: str | None = None, limit: int = 500) -> list[dict]:
+        clauses, params = [], []
+        if severity and severity != "all":
+            clauses.append("severity = ?")
+            params.append(severity)
+        if source:
+            clauses.append("source = ?")
+            params.append(source)
+        if metric:
+            clauses.append("metric_name = ?")
+            params.append(metric)
+        where = f"WHERE {' AND '.join(clauses)}" if clauses else ""
+        df = self.db.df(
+            f"SELECT id, source, metric_name, timestamp, observed_value, expected_value, deviation_score, "
+            f"severity, method, detected_at, alerted FROM anomalies {where} "
+            f"ORDER BY timestamp DESC, abs(deviation_score) DESC LIMIT ?",
+            [*params, int(limit)],
+        )
+        for col in ("timestamp", "detected_at"):
+            if not df.empty:
+                df[col] = df[col].map(lambda t: pd.Timestamp(t).isoformat())
+        return df.to_dict(orient="records")
+
+    def severity_counts(self) -> dict:
+        rows = dict(self.db.execute("SELECT severity, count(*) FROM anomalies GROUP BY severity"))
+        return {s: int(rows.get(s, 0)) for s in SEVERITY_ORDER}
+
+    def recent(self, hours: int = 24) -> list[AnomalyResult]:
+        """Anomalies in the last `hours` before each series' newest point (investigation input)."""
+        df = self.db.df(
+            """
+            SELECT a.* FROM anomalies a
+            JOIN (SELECT source, metric_name, max(timestamp) AS last_ts FROM metrics GROUP BY 1, 2) m
+              ON a.source = m.source AND a.metric_name = m.metric_name
+            WHERE a.timestamp >= m.last_ts - to_hours(CAST(? AS BIGINT))
+            ORDER BY a.timestamp
+            """,
+            [int(hours)],
+        )
         return [
             AnomalyResult(
-                metric_name=metric, source=source,
-                timestamp=df.iloc[i]["timestamp"],
-                observed_value=float(df.iloc[i]["value"]),
-                expected_value=float(mean),
-                deviation_score=float(z.iloc[i]),
-                method="zscore",
-                severity=self._severity(abs(float(z.iloc[i]))),
+                metric_name=r.metric_name, source=r.source, timestamp=r.timestamp,
+                observed_value=r.observed_value, expected_value=r.expected_value,
+                deviation_score=r.deviation_score, method=r.method, severity=r.severity,
             )
-            for i in z[z.abs() >= self.z_threshold].index
+            for r in df.itertuples()
         ]
-
-    @staticmethod
-    def _severity(score: float) -> str:
-        if score >= 5.0: return "critical"
-        if score >= 4.0: return "high"
-        if score >= 3.0: return "medium"
-        return "low"

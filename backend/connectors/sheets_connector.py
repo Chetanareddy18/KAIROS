@@ -4,41 +4,47 @@ import os
 
 import pandas as pd
 
+from backend.connectors.base import BaseConnector, ConnectorError
+
 logger = logging.getLogger("kairos.connector.sheets")
 
 
-class SheetsConnector:
-    def __init__(
-        self,
-        source_name: str,
-        spreadsheet_key: str,
-        worksheet_name: str  = "Sheet1",
-        metric_col: str      = "metric_name",
-        value_col:  str      = "value",
-        ts_col:     str      = "timestamp",
-        credentials_file: str | None = None,
-    ):
-        self.source_name     = source_name
-        self.spreadsheet_key = spreadsheet_key
-        self.worksheet_name  = worksheet_name
-        self.metric_col      = metric_col
-        self.value_col       = value_col
-        self.ts_col          = ts_col
-        self.credentials_file = credentials_file or os.getenv(
-            "GOOGLE_SERVICE_ACCOUNT_JSON", "credentials.json"
-        )
+class SheetsConnector(BaseConnector):
+    type        = "sheets"
+    label       = "Google Sheets"
+    description = "Reads a worksheet with a service account (read-only scope)."
+    CONFIG_FIELDS = [
+        {"name": "spreadsheet_key", "label": "Spreadsheet key", "type": "text", "required": True,
+         "help": "the long id in the sheet URL"},
+        {"name": "worksheet", "label": "Worksheet", "type": "text", "required": False, "default": "Sheet1"},
+        {"name": "credentials_file", "label": "Service account JSON path", "type": "text", "required": False},
+    ]
 
-    def fetch(self) -> pd.DataFrame:
+    def __init__(self, source_name: str, config: dict | None = None, spreadsheet_key: str | None = None,
+                 worksheet_name: str | None = None, credentials_file: str | None = None, **legacy):
+        config = dict(config or {})
+        if spreadsheet_key:
+            config["spreadsheet_key"] = spreadsheet_key
+        if worksheet_name:
+            config["worksheet"] = worksheet_name
+        if credentials_file:
+            config["credentials_file"] = credentials_file
+        config.update({k: v for k, v in legacy.items() if v is not None})
+        super().__init__(source_name, config)
+
+    def fetch_raw(self, state: dict):
         import gspread
         from google.oauth2.service_account import Credentials
 
-        scopes = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
-        creds  = Credentials.from_service_account_file(self.credentials_file, scopes=scopes)
-        gc     = gspread.authorize(creds)
-        ws     = gc.open_by_key(self.spreadsheet_key).worksheet(self.worksheet_name)
-        df     = pd.DataFrame(ws.get_all_records())
-        return df.rename(columns={
-            self.metric_col: "metric_name",
-            self.value_col:  "value",
-            self.ts_col:     "timestamp",
-        })
+        key = self.config.get("spreadsheet_key")
+        if not key:
+            raise ConnectorError("'spreadsheet_key' is required")
+        creds_file = self.config.get("credentials_file") or os.getenv(
+            "GOOGLE_SERVICE_ACCOUNT_JSON", "credentials.json"
+        )
+        creds = Credentials.from_service_account_file(
+            creds_file, scopes=["https://www.googleapis.com/auth/spreadsheets.readonly"]
+        )
+        ws = gspread.authorize(creds).open_by_key(key).worksheet(self.config.get("worksheet", "Sheet1"))
+        df = pd.DataFrame(ws.get_all_records())
+        return df, state, {"bytes": int(df.memory_usage(deep=True).sum()) if not df.empty else 0}

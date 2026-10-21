@@ -1,0 +1,85 @@
+# KAIROS data sources — copy to sources.yaml (or add sources from the dashboard).
+#
+# Five protocol-level adapters cover almost every business system, so a new company
+# needs configuration, not code. Secrets never live here: use ${ENV_VAR} or *_env keys.
+#
+# Mapping keys shared by every type (all optional — "Test & preview" lets SLAC infer them):
+#   format: long | wide        ts_col   metric_col / value_col (long)   metrics: [..] | {col: name} (wide)
+#   aggregate: {freq: 1h, agg: sum | {col: agg}}   count_metric: name   (turn raw records into KPIs)
+
+sources:
+  # 1. SQL — the query runs INSIDE the source database, so only aggregated KPIs travel.
+  #    :since = last timestamp KAIROS stored for this source (incremental loads).
+  - name: erp_postgres
+    type: sql
+    enabled: false
+    url: postgresql://kairos_readonly:${ERP_DB_PASSWORD}@erp-db.internal:5432/erp
+    query: |
+      SELECT date_trunc('hour', created_at) AS timestamp,
+             SUM(total) AS revenue, COUNT(*) AS orders, AVG(total) AS avg_order_value
+      FROM orders
+      WHERE created_at >= :since
+      GROUP BY 1
+    ts_col: timestamp
+
+  # 2. SFTP / FTPS / FTP — universal zero-cost batch route. Only NEW files are downloaded;
+  #    files still being written are skipped. Use sftp/ftps in production.
+  - name: logistics_sftp
+    type: sftp
+    enabled: false
+    protocol: sftp
+    host: sftp.partner.com
+    port: 22
+    username: kairos
+    password_env: LOGISTICS_SFTP_PASSWORD     # or key_file: /secrets/id_ed25519
+    folder: /exports/kpis
+    pattern: "kpis_*.csv.gz"
+    min_age_seconds: 60                       # or require_done_marker: true
+    format: long
+    metric_col: kpi
+    value_col: value
+    ts_col: ts
+
+  # 3. Files — local paths, globs, S3/GCS/HTTPS. DuckDB streams them (larger than RAM is fine)
+  #    and, with `aggregate`, reduces raw exports to KPIs before anything is stored.
+  - name: pos_exports
+    type: file
+    enabled: false
+    path: s3://acme-exports/pos/*.parquet
+    s3_region: ap-south-1
+    s3_access_key_id_env: AWS_ACCESS_KEY_ID
+    s3_secret_access_key_env: AWS_SECRET_ACCESS_KEY
+    ts_col: sold_at
+    metrics: {amount: pos_revenue, items: units_sold}
+    aggregate: {freq: 1h, agg: sum}
+    count_metric: pos_transactions
+
+  # 4. REST — one config-driven adapter for any JSON API (Shopify, Stripe, HubSpot, in-house).
+  - name: shop_api
+    type: rest
+    enabled: false
+    url: https://acme.myshopify.com/admin/api/2026-07/orders.json
+    headers: {X-Shopify-Access-Token: "${SHOPIFY_TOKEN}"}
+    params: {status: any, limit: 250}
+    records_path: orders
+    since_param: created_at_min
+    pagination: {type: link, next_path: next}
+    ts_col: created_at
+    metrics: {total_price: shop_revenue}
+    aggregate: {freq: 1h, agg: sum}
+    count_metric: shop_orders
+
+  # 5. Google Sheets — small teams' spreadsheets (service account, read-only scope).
+  - name: cs_sheet
+    type: sheets
+    enabled: false
+    spreadsheet_key: 1AbCdEfGhIjKlMnOpQrStUvWxYz
+    worksheet: Daily
+    credentials_file: credentials.json
+    ts_col: date
+
+  # 6. Push — no polling at all: webhooks and the edge agent POST to /api/v1/ingest.
+  #    (Push sources are also created automatically on first push.)
+  - name: store_42_edge
+    type: push
+    description: edge agent in store 42 aggregates POS data locally and pushes KPIs

@@ -1,15 +1,14 @@
 import Dashboard from '../components/Dashboard'
+import { PageHeader } from '../components/ui'
 
-export default function Home() {
+export default function Home({ status }) {
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        <p className="text-sm text-gray-400 mt-1">
-          Live anomaly monitoring · 15-minute pipeline · Causal root cause analysis
-        </p>
-      </div>
-      <Dashboard />
+      <PageHeader
+        title="Overview"
+        subtitle="KAIROS watches every connected metric, detects anomalies, finds their causal origin and alerts you — without being asked."
+      />
+      <Dashboard status={status} />
     </div>
   )
 }

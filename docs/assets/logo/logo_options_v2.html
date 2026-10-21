@@ -1,0 +1,96 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Outfit:wght@800&family=JetBrains+Mono:wght@700&family=Cinzel:wght@600&family=Michroma&family=Unbounded:wght@700&family=Archivo+Black&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#E9EEED;font-family:'Space Grotesk',Arial,sans-serif}
+  .grid{display:grid;grid-template-columns:repeat(2,660px);gap:26px;padding:34px}
+  .card{border-radius:22px;height:300px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+  .lab{position:absolute;top:16px;left:22px;font-size:13px;letter-spacing:.06em;opacity:.6}
+  .tag{font-size:12px;letter-spacing:.42em;margin-top:14px;opacity:.7}
+  .light{background:#fff;color:#0B2B2A} .dark{background:#071C1C;color:#E8F6F3}
+  .cream{background:#F6F1E7;color:#13302E} .ink{background:#0A0F1A;color:#E9EEF7}
+
+  /* A serif, gold dot on the i */
+  .a{font-family:'Playfair Display';font-weight:700;font-size:92px;letter-spacing:.01em;line-height:1}
+  .a .i{position:relative}
+  .a .i::after{content:"";position:absolute;left:50%;top:24px;width:19px;height:19px;margin-left:-9.5px;border-radius:50%;
+     background:radial-gradient(circle at 35% 35%,#FFE08A,#F2A31B);box-shadow:0 0 18px #F5B94288}
+
+  /* B geometric, radar o */
+  .b{font-family:Outfit;font-weight:800;font-size:96px;letter-spacing:-.02em;line-height:1;display:flex;align-items:baseline;color:#0F5F5C}
+  .b svg{width:70px;height:70px;margin:0 2px;transform:translateY(4px)}
+
+  /* C terminal */
+  .c{font-family:'JetBrains Mono';font-weight:700;font-size:80px;line-height:1}
+  .c .p{color:#2FD1B5} .c .cur{display:inline-block;width:40px;height:72px;background:#F5B942;margin-left:6px;transform:translateY(10px)}
+
+  /* D greek luxury */
+  .d{font-family:Cinzel;font-weight:600;font-size:78px;letter-spacing:.24em;line-height:1;display:flex;align-items:center;
+     background:linear-gradient(180deg,#F7DE9A,#C9973A);-webkit-background-clip:text;color:transparent}
+  .d svg{width:58px;height:66px;margin:0 .24em 0 0}
+
+  /* E delta = change */
+  .e{font-family:Michroma;font-size:62px;letter-spacing:.16em;line-height:1;display:flex;align-items:center}
+  .e svg{width:68px;height:62px;margin-right:.16em}
+
+  /* F causal chain under the word */
+  .f{font-family:Unbounded;font-weight:700;font-size:78px;letter-spacing:.02em;line-height:1;color:#0B2B2A}
+  .f+svg{width:430px;height:34px;margin-top:10px}
+
+  /* G badge */
+  .g svg{width:240px;height:240px}
+
+  /* H bold italic momentum */
+  .h{font-family:'Archivo Black';font-style:italic;font-size:96px;letter-spacing:.01em;line-height:1;display:flex;align-items:center;
+     transform:skewX(-8deg)}
+  .h .t{background:linear-gradient(90deg,#3FE0C5,#1E9A93 55%,#0E5F5B);-webkit-background-clip:text;color:transparent}
+  .h .sl{display:flex;gap:7px;margin-right:16px}.h .sl i{display:block;width:10px;height:62px;background:#F5B942;border-radius:3px;transform:skewX(-20deg)}
+  .h .sl i:nth-child(2){opacity:.6}.h .sl i:nth-child(3){opacity:.3}
+</style></head><body>
+<div class="grid">
+
+  <div class="card cream"><span class="lab">A · Editorial Serif</span>
+    <div class="a">ka<span class="i">ı</span>ros</div>
+    <div class="tag">CAUSAL INTELLIGENCE</div></div>
+
+  <div class="card light"><span class="lab">B · Radar O</span>
+    <div class="b">kair<svg viewBox="0 0 70 70">
+      <circle cx="35" cy="35" r="27" fill="none" stroke="#0F5F5C" stroke-width="10"/>
+      <path d="M35 35 L35 8 A27 27 0 0 1 59 22 Z" fill="#2FD1B5" opacity=".55"/>
+      <circle cx="35" cy="35" r="7" fill="#F5A524"/></svg>s</div>
+    <div class="tag" style="color:#0F5F5C">SEES IT BEFORE YOU DO</div></div>
+
+  <div class="card ink"><span class="lab">C · Terminal</span>
+    <div class="c"><span class="p">&gt;</span>kairos<span class="cur"></span></div>
+    <div class="tag" style="font-family:'JetBrains Mono';letter-spacing:.12em">// root cause, before you ask</div></div>
+
+  <div class="card dark"><span class="lab">D · Greek Gold</span>
+    <div class="d">K<svg viewBox="0 0 58 66"><defs><linearGradient id="gd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7DE9A"/><stop offset="1" stop-color="#C9973A"/></linearGradient></defs>
+      <path d="M4 64 L29 10 L54 64" fill="none" stroke="url(#gd)" stroke-width="7"/><circle cx="29" cy="7" r="6" fill="#FFE7A6"/></svg>IROS</div>
+    <div class="tag" style="color:#D8B66A">THE RIGHT MOMENT</div></div>
+
+  <div class="card dark"><span class="lab">E · Delta (Δ = change)</span>
+    <div class="e">K<svg viewBox="0 0 68 62"><defs><linearGradient id="ge" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#1E9A93"/><stop offset="1" stop-color="#3FE0C5"/></linearGradient></defs>
+      <path d="M34 4 L64 58 L4 58 Z" fill="none" stroke="url(#ge)" stroke-width="7" stroke-linejoin="round"/><circle cx="34" cy="40" r="7" fill="#F5B942"/></svg>IROS</div>
+    <div class="tag">DETECT · EXPLAIN · ACT</div></div>
+
+  <div class="card light"><span class="lab">F · Causal Chain</span>
+    <div class="f">kairos</div>
+    <svg viewBox="0 0 430 34"><g stroke="#1E9A93" stroke-width="3" fill="none">
+      <path d="M22 17 H400"/><path d="M394 9 L406 17 L394 25"/></g>
+      <circle cx="22" cy="17" r="10" fill="#F5A524"/>
+      <g fill="#1E9A93"><circle cx="118" cy="17" r="7"/><circle cx="212" cy="17" r="7" opacity=".75"/><circle cx="306" cy="17" r="7" opacity=".5"/></g></svg>
+    <div class="tag" style="margin-top:6px">FROM ORIGIN TO OUTCOME</div></div>
+
+  <div class="card cream g"><span class="lab">G · Seal / Badge</span>
+    <svg viewBox="0 0 240 240"><defs><path id="ring" d="M120 120 m-88 0 a88 88 0 1 1 176 0 a88 88 0 1 1 -176 0"/></defs>
+      <circle cx="120" cy="120" r="112" fill="#0F4F4C"/><circle cx="120" cy="120" r="70" fill="none" stroke="#E9C77B" stroke-width="2"/>
+      <text font-family="Space Grotesk" font-size="15" letter-spacing="6.2" fill="#E9C77B"><textPath href="#ring">KAIROS · CAUSAL INTELLIGENCE · EST 2026 ·</textPath></text>
+      <text x="120" y="146" text-anchor="middle" font-family="Cinzel" font-weight="600" font-size="76" fill="#F6F1E7">K</text>
+      <circle cx="155" cy="84" r="7" fill="#F5B942"/></svg></div>
+
+  <div class="card ink"><span class="lab">H · Momentum</span>
+    <div class="h"><span class="sl"><i></i><i></i><i></i></span><span class="t">KAIROS</span></div>
+    <div class="tag">AUTONOMOUS · CAUSAL · BI</div></div>
+
+</div></body></html>

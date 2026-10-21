@@ -1,5 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
 body {
   background-color: #F7F5F0;
   color: #1a1a1a;
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
+
+@layer components {
+  .card { @apply bg-white rounded-xl shadow-sm border border-black/5; }
+  .card-h { @apply px-5 py-3.5 border-b border-gray-100 flex items-center justify-between gap-3; }
+  .btn { @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed; }
+  .btn-primary { @apply btn bg-teal text-white hover:bg-teal-dark; }
+  .btn-ghost { @apply btn bg-white text-gray-700 border border-gray-200 hover:border-teal hover:text-teal; }
+  .btn-danger { @apply btn bg-white text-red-600 border border-red-200 hover:bg-red-50; }
+  .btn-sm { @apply px-3 py-1.5 text-xs; }
+  .input { @apply w-full rounded-lg border border-gray-200 px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal; }
+  .label { @apply block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1; }
+  .th { @apply px-4 py-2 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wide; }
+  .td { @apply px-4 py-2 text-sm; }
+  .chip { @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap; }
+}
+
+.scroll-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+.scroll-thin::-webkit-scrollbar-thumb { background: #d4d4d4; border-radius: 3px; }
+
+@keyframes pulse-dot { 0%, 100% { opacity: 1 } 50% { opacity: .35 } }
+.pulse-dot { animation: pulse-dot 1.4s ease-in-out infinite; }

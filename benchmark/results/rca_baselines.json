@@ -1,0 +1,1038 @@
+{
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "results": {
+    "Largest deviation (top movers)": {
+      "exact": {
+        "mean": 0.7,
+        "std": 0.45825756949558394
+      },
+      "precision": {
+        "mean": 0.85,
+        "std": 0.22912878474779197
+      },
+      "recall": {
+        "mean": 0.85,
+        "std": 0.22912878474779197
+      },
+      "f1": {
+        "mean": 0.85,
+        "std": 0.22912878474779197
+      },
+      "chain_precision": null,
+      "seconds": {
+        "mean": 2.0309997489675878e-05,
+        "std": 4.865692901442584e-06
+      }
+    },
+    "Earliest anomaly": {
+      "exact": {
+        "mean": 0.0,
+        "std": 0.0
+      },
+      "precision": {
+        "mean": 0.35,
+        "std": 0.22912878474779197
+      },
+      "recall": {
+        "mean": 0.35,
+        "std": 0.22912878474779197
+      },
+      "f1": {
+        "mean": 0.35,
+        "std": 0.22912878474779197
+      },
+      "chain_precision": null,
+      "seconds": {
+        "mean": 5.0929997814819214e-05,
+        "std": 3.224236497578888e-05
+      }
+    },
+    "Correlation graph + ranking": {
+      "exact": {
+        "mean": 0.3,
+        "std": 0.45825756949558394
+      },
+      "precision": {
+        "mean": 0.7166666666666667,
+        "std": 0.29860788111948194
+      },
+      "recall": {
+        "mean": 0.8,
+        "std": 0.33166247903554
+      },
+      "f1": {
+        "mean": 0.7366666666666667,
+        "std": 0.287691964897643
+      },
+      "chain_precision": {
+        "mean": 0.30000000000000004,
+        "std": 0.1
+      },
+      "seconds": {
+        "mean": 0.8139157200028422,
+        "std": 1.983851209342161
+      }
+    },
+    "Granger graph + ranking": {
+      "exact": {
+        "mean": 0.6,
+        "std": 0.48989794855663565
+      },
+      "precision": {
+        "mean": 1.0,
+        "std": 0.0
+      },
+      "recall": {
+        "mean": 0.8,
+        "std": 0.24494897427831783
+      },
+      "f1": {
+        "mean": 0.8666666666666666,
+        "std": 0.16329931618554522
+      },
+      "chain_precision": {
+        "mean": 0.9800000000000001,
+        "std": 0.05999999999999999
+      },
+      "seconds": {
+        "mean": 0.13236300999997183,
+        "std": 0.018365391312957936
+      }
+    },
+    "VARLiNGAM graph + ranking": {
+      "exact": {
+        "mean": 0.4,
+        "std": 0.4898979485566356
+      },
+      "precision": {
+        "mean": 1.0,
+        "std": 0.0
+      },
+      "recall": {
+        "mean": 0.7,
+        "std": 0.24494897427831783
+      },
+      "f1": {
+        "mean": 0.8,
+        "std": 0.16329931618554522
+      },
+      "chain_precision": {
+        "mean": 0.9800000000000001,
+        "std": 0.05999999999999999
+      },
+      "seconds": {
+        "mean": 0.5057757499918807,
+        "std": 0.08913019271872023
+      }
+    },
+    "KAIROS without bootstrap": {
+      "exact": {
+        "mean": 1.0,
+        "std": 0.0
+      },
+      "precision": {
+        "mean": 1.0,
+        "std": 0.0
+      },
+      "recall": {
+        "mean": 1.0,
+        "std": 0.0
+      },
+      "f1": {
+        "mean": 1.0,
+        "std": 0.0
+      },
+      "chain_precision": {
+        "mean": 1.0,
+        "std": 0.0
+      },
+      "seconds": {
+        "mean": 0.34700876000279096,
+        "std": 0.05856381379392661
+      }
+    },
+    "KAIROS (DYNOTEARS + ranking)": {
+      "exact": {
+        "mean": 1.0,
+        "std": 0.0
+      },
+      "precision": {
+        "mean": 1.0,
+        "std": 0.0
+      },
+      "recall": {
+        "mean": 1.0,
+        "std": 0.0
+      },
+      "f1": {
+        "mean": 1.0,
+        "std": 0.0
+      },
+      "chain_precision": {
+        "mean": 1.0,
+        "std": 0.0
+      },
+      "seconds": {
+        "mean": 0.9484009700041497,
+        "std": 0.15013604188446944
+      }
+    }
+  },
+  "runs": {
+    "Largest deviation (top movers)": [
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": null,
+        "seconds": 1.8999999156221747e-05,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": null,
+        "seconds": 2.7700007194653153e-05,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": null,
+        "seconds": 1.2899981811642647e-05,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "chain_precision": null,
+        "seconds": 2.069998299703002e-05,
+        "named": [
+          "delivery_delay_hrs",
+          "support_tickets_open"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": null,
+        "seconds": 2.0800012862309813e-05,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "chain_precision": null,
+        "seconds": 1.4899997040629387e-05,
+        "named": [
+          "delivery_delay_hrs",
+          "support_tickets_open"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": null,
+        "seconds": 2.5900022592395544e-05,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": null,
+        "seconds": 1.5099998563528061e-05,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "chain_precision": null,
+        "seconds": 1.969997538253665e-05,
+        "named": [
+          "delivery_delay_hrs",
+          "support_tickets_open"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": null,
+        "seconds": 2.6399997295811772e-05,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      }
+    ],
+    "Earliest anomaly": [
+      {
+        "exact": 0.0,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "chain_precision": null,
+        "seconds": 3.4199998481199145e-05,
+        "named": [
+          "ad_spend_usd",
+          "refund_count"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "chain_precision": null,
+        "seconds": 5.360000068321824e-05,
+        "named": [
+          "ad_spend_usd",
+          "refund_count"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "chain_precision": null,
+        "seconds": 2.780000795610249e-05,
+        "named": [
+          "conversion_rate",
+          "refund_count"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "chain_precision": null,
+        "seconds": 4.509999416768551e-05,
+        "named": [
+          "daily_revenue",
+          "refund_count"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "chain_precision": null,
+        "seconds": 4.5599997974932194e-05,
+        "named": [
+          "ad_spend_usd",
+          "order_count"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "chain_precision": null,
+        "seconds": 3.850000211969018e-05,
+        "named": [
+          "inventory_turnover",
+          "refund_count"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "chain_precision": null,
+        "seconds": 0.0001449999981559813,
+        "named": [
+          "ad_spend_usd",
+          "refund_count"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "chain_precision": null,
+        "seconds": 3.179998020641506e-05,
+        "named": [
+          "ad_spend_usd",
+          "refund_count"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "chain_precision": null,
+        "seconds": 3.9300008211284876e-05,
+        "named": [
+          "ad_spend_usd",
+          "refund_count"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "chain_precision": null,
+        "seconds": 4.839999019168317e-05,
+        "named": [
+          "ad_spend_usd",
+          "refund_count"
+        ]
+      }
+    ],
+    "Correlation graph + ranking": [
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 0.4,
+        "seconds": 6.765121300006285,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 0.6666666666666666,
+        "recall": 1.0,
+        "f1": 0.8,
+        "chain_precision": 0.4,
+        "seconds": 0.15998460000264458,
+        "named": [
+          "ad_spend_usd",
+          "click_through_rate",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 0.2,
+        "seconds": 0.10338909999700263,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "chain_precision": 0.4,
+        "seconds": 0.13304510002490133,
+        "named": [
+          "ad_spend_usd",
+          "click_through_rate"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "chain_precision": 0.2,
+        "seconds": 0.16332610000972636,
+        "named": []
+      },
+      {
+        "exact": 0.0,
+        "precision": 0.6666666666666666,
+        "recall": 1.0,
+        "f1": 0.8,
+        "chain_precision": 0.2,
+        "seconds": 0.14848280002479441,
+        "named": [
+          "ad_spend_usd",
+          "click_through_rate",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 0.2,
+        "seconds": 0.15160800001467578,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 0.6666666666666666,
+        "recall": 1.0,
+        "f1": 0.8,
+        "chain_precision": 0.4,
+        "seconds": 0.17916599998716265,
+        "named": [
+          "ad_spend_usd",
+          "click_through_rate",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "chain_precision": 0.2,
+        "seconds": 0.18269379998673685,
+        "named": [
+          "ad_spend_usd"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 0.6666666666666666,
+        "recall": 1.0,
+        "f1": 0.8,
+        "chain_precision": 0.4,
+        "seconds": 0.15234039997449145,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs",
+          "gross_margin_pct"
+        ]
+      }
+    ],
+    "Granger graph + ranking": [
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.12183489999733865,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "chain_precision": 1.0,
+        "seconds": 0.10597139998571947,
+        "named": [
+          "ad_spend_usd"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.1280313000024762,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.10992220000480302,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "chain_precision": 1.0,
+        "seconds": 0.14283319999231026,
+        "named": [
+          "ad_spend_usd"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "chain_precision": 0.8,
+        "seconds": 0.1338271000131499,
+        "named": [
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.13865480001550168,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "chain_precision": 1.0,
+        "seconds": 0.15411069997935556,
+        "named": [
+          "ad_spend_usd"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.16807139999582432,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.12037310001323931,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      }
+    ],
+    "VARLiNGAM graph + ranking": [
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.5602844999812078,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "chain_precision": 1.0,
+        "seconds": 0.5145217999815941,
+        "named": [
+          "ad_spend_usd"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "chain_precision": 1.0,
+        "seconds": 0.397798399993917,
+        "named": [
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.368955999991158,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "chain_precision": 1.0,
+        "seconds": 0.4300346999953035,
+        "named": [
+          "ad_spend_usd"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "chain_precision": 0.8,
+        "seconds": 0.5347768999927212,
+        "named": [
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.5626702999870759,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "chain_precision": 1.0,
+        "seconds": 0.5998137000133283,
+        "named": [
+          "ad_spend_usd"
+        ]
+      },
+      {
+        "exact": 0.0,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "chain_precision": 1.0,
+        "seconds": 0.6548273999942467,
+        "named": [
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.4340737999882549,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      }
+    ],
+    "KAIROS without bootstrap": [
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.3113221999956295,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.3444137999904342,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.30830750000313856,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.4360445000056643,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.26710450000246055,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.32488160001230426,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.3255636000249069,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.3294439000019338,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.34973710001213476,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.47326889997930266,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      }
+    ],
+    "KAIROS (DYNOTEARS + ranking)": [
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.9424994000000879,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.7274383000039961,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.7607271000160836,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 1.0891690000134986,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.9425963000103366,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 1.0203393000119831,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.8634173999889754,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.9751797000062652,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 0.8902353000012226,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      },
+      {
+        "exact": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "chain_precision": 1.0,
+        "seconds": 1.272407899989048,
+        "named": [
+          "ad_spend_usd",
+          "delivery_delay_hrs"
+        ]
+      }
+    ]
+  }
+}

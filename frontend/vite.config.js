@@ -5,7 +5,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': 'http://localhost:8000',
+      // 127.0.0.1, not localhost: avoids a ~2 s IPv6 fallback per request on Windows
+      '/api': 'http://127.0.0.1:8000',
     },
   },
 })

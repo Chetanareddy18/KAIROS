@@ -1,0 +1,67 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#06191A;--card:#0C2627;--line:#1C4A48;--teal:#2FD1B5;--teal2:#1E9A93;--gold:#F5B942;--red:#FF6B6B;--ink:#EAF7F4;--mute:#8FB3AE}
+  body.light{--bg:#F5F2EA;--card:#FFFFFF;--line:#D9E4E1;--teal:#0F8F84;--teal2:#1E9A93;--gold:#E59A12;--red:#D94848;--ink:#0B2B2A;--mute:#5E7C78}
+  *{box-sizing:border-box}
+  body{margin:0;width:1200px;height:1200px;background:var(--bg);color:var(--ink);font-family:Sora,Arial,sans-serif;position:relative;overflow:hidden}
+  body:not(.light)::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 500px at 85% 10%,#15524D66,transparent 70%),radial-gradient(600px 500px at 0% 100%,#0F3B3955,transparent 70%)}
+  .wrap{position:relative;padding:64px 72px;height:100%;display:flex;flex-direction:column}
+  .brand{display:flex;align-items:center;gap:14px;font-weight:800;letter-spacing:.32em;font-size:24px}
+  .brand i{width:14px;height:14px;border-radius:50%;background:var(--gold);box-shadow:0 0 16px var(--gold)}
+  .brand span{font-weight:400;letter-spacing:.18em;font-size:14px;color:var(--mute);margin-left:10px}
+
+  .says{margin-top:44px;font-size:30px;color:var(--mute);font-weight:600}
+  .alert{display:inline-flex;align-items:center;gap:14px;margin-top:14px;padding:16px 26px;border-radius:16px;
+         background:color-mix(in srgb,var(--red) 12%,transparent);border:2px solid color-mix(in srgb,var(--red) 55%,transparent);
+         font-size:40px;font-weight:700;color:var(--red)}
+  .head{margin-top:30px;font-size:66px;line-height:1.05;font-weight:800;letter-spacing:-.02em}
+  .head em{font-style:normal;color:var(--gold)}
+
+  .chain{margin-top:40px;display:flex;flex-direction:column;gap:0;position:relative}
+  .row{display:grid;grid-template-columns:96px 1fr 300px;align-items:center;height:92px;position:relative}
+  .t{font-family:'JetBrains Mono';font-size:20px;color:var(--mute);font-weight:500}
+  .node{display:flex;align-items:center;gap:22px}
+  .dot{width:26px;height:26px;border-radius:50%;background:var(--teal2);border:4px solid var(--bg);box-shadow:0 0 0 2px var(--teal2);flex:none;position:relative;z-index:2}
+  .name{font-size:30px;font-weight:700}
+  .tag{font-size:13px;font-weight:700;letter-spacing:.16em;padding:6px 10px;border-radius:8px;background:var(--gold);color:#1A1200;margin-left:6px}
+  .val{font-family:'JetBrains Mono';font-size:22px;text-align:right;color:var(--mute)}
+  .val b{color:var(--ink);font-weight:700}
+  .val .d{display:inline-block;min-width:104px;margin-left:12px;color:var(--red);font-weight:700}
+  .row.origin .dot{width:34px;height:34px;background:var(--gold);box-shadow:0 0 0 3px var(--gold),0 0 30px var(--gold)}
+  .row.origin .name{color:var(--gold)}
+  .row.final .dot{background:var(--red);box-shadow:0 0 0 2px var(--red)}
+  .rail{position:absolute;left:96px;margin-left:13px;top:46px;bottom:46px;width:4px;border-radius:2px;
+        background:linear-gradient(var(--gold),var(--teal2) 30%,var(--teal2) 75%,var(--red))}
+  .row:not(:last-child)::after{content:"";position:absolute;left:96px;margin-left:7px;bottom:-9px;border:8px solid transparent;border-top:12px solid var(--teal2);z-index:1}
+
+  .foot{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid var(--line);padding-top:26px}
+  .foot .l{font-size:22px;font-weight:700}
+  .foot .l small{display:block;font-weight:400;font-size:17px;color:var(--mute);margin-top:6px}
+  .foot .r{font-family:'JetBrains Mono';font-size:17px;color:var(--teal);text-align:right;line-height:1.6}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="brand"><i></i>KAIROS<span>AUTONOMOUS CAUSAL BI AGENT</span></div>
+
+  <div class="says">Your dashboard says:</div>
+  <div><span class="alert">⚠ Customer churn is up 51.8%</span></div>
+  <div class="head">KAIROS traces <em>why</em><br>— back to where it started.</div>
+
+  <div class="chain">
+    <div class="rail"></div>
+    <div class="row origin"><span class="t">T−4h</span><div class="node"><span class="dot"></span><span class="name">Delivery delays</span><span class="tag">ROOT CAUSE</span></div><div class="val"><b>1.5 → 4.2 hrs</b><span class="d">+171%</span></div></div>
+    <div class="row"><span class="t">T−3h</span><div class="node"><span class="dot"></span><span class="name">Support tickets</span></div><div class="val"><b>54 → 115</b><span class="d">+115%</span></div></div>
+    <div class="row"><span class="t">T−2h</span><div class="node"><span class="dot"></span><span class="name">Response time</span></div><div class="val"><b>3.7 → 7.5 hrs</b><span class="d">+105%</span></div></div>
+    <div class="row"><span class="t">T−1h</span><div class="node"><span class="dot"></span><span class="name">NPS</span></div><div class="val"><b>38.9 → 20.5</b><span class="d">−47%</span></div></div>
+    <div class="row final"><span class="t">now</span><div class="node"><span class="dot"></span><span class="name">Customer churn</span></div><div class="val"><b>2.3 → 3.6%</b><span class="d">+52%</span></div></div>
+  </div>
+
+  <div class="foot">
+    <div class="l">B.Tech Capstone Project-I<small>Woxsen University</small></div>
+    <div class="r">collect → detect → investigate<br>→ explain → alert · every 15 min</div>
+  </div>
+</div>
+<script>if(location.hash==='#light')document.body.classList.add('light')</script>
+</body></html>

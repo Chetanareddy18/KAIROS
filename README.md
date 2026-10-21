@@ -2,13 +2,14 @@
 
 <div align="center">
 
-![KAIROS Banner](docs/assets/banner.png)
+<img src="docs/assets/linkedin/01_cover_final.png" alt="KAIROS: dashboards live in chronos, we built for kairos" width="640">
 
 **An Autonomous Causal Business Intelligence Agent for Proactive Multi-Source Metric Monitoring and Root Cause Analysis**
 
-[![Python](https://img.shields.io/badge/Python-3.11+-blue?style=flat-square&logo=python)](https://python.org)
+[![Python](https://img.shields.io/badge/Python-3.13-blue?style=flat-square&logo=python)](https://python.org)
+[![React](https://img.shields.io/badge/React-18-61dafb?style=flat-square&logo=react)](https://react.dev)
+[![Tests](https://img.shields.io/badge/tests-pytest-success?style=flat-square)](tests/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
-[![Deployment](https://img.shields.io/badge/Deployed-Render%20%2B%20Vercel-teal?style=flat-square)](https://kairos-app.vercel.app)
 [![Cost](https://img.shields.io/badge/Total%20Cost-₹0-brightgreen?style=flat-square)]()
 [![University](https://img.shields.io/badge/Woxsen%20University-Capstone%20Project--I-navy?style=flat-square)]()
 
@@ -20,233 +21,239 @@
 
 ## What is KAIROS?
 
-Every Business Intelligence tool today — Power BI, Tableau, Looker, ThoughtSpot — waits for a human to open it and ask a question. If nobody looks, nobody knows anything is wrong.
+Every BI tool today (Power BI, Tableau, Looker, ThoughtSpot) waits for a human to open it and ask a
+question. If nobody looks, nobody knows anything is wrong.
 
-**KAIROS** breaks this paradigm. It is a five-agent autonomous pipeline that:
+**KAIROS** is a five-agent autonomous pipeline that, every 15 minutes and without being asked:
 
-- **Monitors** all connected business metrics every 15 minutes — automatically
-- **Detects** anomalies using Prophet and Anomaly Transformer — without being asked
-- **Investigates** root causes using DYNOTEARS temporal causal discovery — not just correlations
-- **Explains** findings in plain English using a free local LLM (Llama 3.1)
-- **Delivers** Telegram alerts within 5 minutes — to any phone
+1. **Collects** metrics from any source (SQL, SFTP/FTP, files and cloud storage, REST APIs, Google Sheets, push/webhooks), incrementally.
+2. **Detects** anomalies with a seasonal robust z-score + Prophet ensemble.
+3. **Investigates** their *causal* origin with **DYNOTEARS** temporal causal discovery, not correlation.
+4. **Explains** them in plain English with an LLM whose every number is checked by an **LLM-Modulo** verifier.
+5. **Delivers** alerts to Telegram, e-mail and the dashboard, with no duplicates and no spam.
 
-Total deployment cost: **₹0**
+Total deployment cost: **₹0** (open-source stack, free-tier LLM, optional local LLM).
 
 ---
 
-## The Three Novel Contributions
+## Screenshots
 
-| Contribution | Description |
+| Causal Analysis: graph and root-cause chains | Verified report and alert history |
 |---|---|
-| **ProBI** — Proactive Business Intelligence | First formal definition of autonomous business metric monitoring without human initiation |
-| **CBMG** — Causal Business Metric Graph | First application of DYNOTEARS temporal causal discovery to business KPI anomaly root cause analysis |
-| **SLAC** — Semantic Layer Auto-Construction | First system to automatically infer business meaning from raw heterogeneous schemas using a local LLM |
+| ![Causal Analysis](docs/assets/linkedin/02_causal_analysis.png) | ![Reports & Alerts](docs/assets/linkedin/03_verified_report.png) |
+| **Fast Transfer: chunked, parallel, SHA-256 verified** | **Data Sources: SQL, SFTP/FTP, files, REST** |
+| ![Fast Transfer](docs/assets/linkedin/04_fast_transfer.png) | ![Data Sources](docs/assets/linkedin/05_data_sources.png) |
+
+![Overview](docs/assets/linkedin/06_overview.png)
 
 ---
 
-## System Architecture
+## Novel contributions
 
-```
-[Google Sheets] [SQL Database] [CSV / REST API]
-          ↓            ↓               ↓
-       AGENT 1: Data Collector
-       SQLAlchemy + Airbyte + APScheduler (every 15 min)
-                    ↓
-          [DuckDB Time-Series Store]
-                    ↓
-       AGENT 2: Anomaly Watchman
-       Prophet + Anomaly Transformer
-                    ↓  (anomaly detected)
-       AGENT 3: Causal Investigator  ← Core Research Contribution
-       DYNOTEARS + DoWhy + CBMG Builder
-                    ↓
-       AGENT 4: NL Reporter
-       Ollama + Llama 3.1 + LLM-Modulo
-                    ↓
-       AGENT 5: Messenger
-       Telegram Bot API + FastAPI + React
-         ↓              ↓            ↓
-    Phone Alert    Dashboard      Gmail
-```
+| Contribution | What it is | Where |
+|---|---|---|
+| **ProBI**: Proactive BI | Autonomous monitoring loop with first-sighting anomaly tracking and alert gating (new + recent + severity + cooldown) | `backend/pipeline.py`, `agents/anomaly_watchman.py` |
+| **CBMG**: Causal Business Metric Graph | DYNOTEARS (implemented from the paper in numpy/scipy) learns a directed, lagged causal graph of KPIs; bootstrap edge confidence; root causes ranked by strongest path and temporal precedence; DoWhy effect estimates | `models/dynotears.py`, `models/cbmg.py`, `agents/causal_investigator.py` |
+| **SLAC**: Semantic Layer Auto-Construction | Infers mapping (timestamp, long/wide, metric columns, raw→aggregate) and business semantics (unit, category, higher-is-better) for any new source, with an LLM + deterministic fallback | `models/slac.py` |
+| **Smart ingestion layer** | 5 protocol adapters instead of per-product connectors; SQL push-down; SFTP/FTP new-file tracking; edge agent; **KAIROS Fast Transfer** (chunked, parallel, compressed, resumable, SHA-256) | `connectors/`, `services/transfer.py`, `edge_agent/` |
+
+**Evaluation on data with a known causal ground truth** (`backend/demo/synthetic.py`, 15 metrics, 4 sources):
+
+- DYNOTEARS recovers **11 of 12 true causal edges with 0 false edges** (precision 1.00, recall 0.92, F1 0.96).
+- Every recovered edge has the correct direction, lag and sign.
+- Both injected incident origins are identified.
+
+(`tests/test_core.py`, `notebooks/03_causal_analysis.ipynb`.)
 
 ---
 
-## Tech Stack (100% Free)
+## Architecture
+
+```
+ SQL DB ─┐  SFTP/FTP ─┐  Files/S3 ─┐  REST API ─┐  Sheets ─┐  Push / Edge agent / Fast Transfer ─┐
+         └────────────┴────────────┴────────────┴──────────┴────────────────────────────────────┘
+                                              │  incremental (watermarks), parallel, push-down
+                         AGENT 1  Data Collector  ── SLAC mapping ──►  DuckDB (idempotent upserts)
+                                              │
+                         AGENT 2  Anomaly Watchman   robust z (seasonal) + Prophet → anomalies table
+                                              │  only NEW, recent, ≥ severity, not in cooldown
+                         AGENT 3  Causal Investigator   DYNOTEARS → CBMG → root-cause chains → DoWhy
+                                              │
+                         AGENT 4  NL Reporter   Groq / Ollama draft → LLM-Modulo verifier → template fallback
+                                              │
+                         AGENT 5  Messenger   Telegram · Gmail · dashboard (history persisted)
+
+        LangGraph state machine · APScheduler (background thread) · FastAPI · React dashboard
+```
+
+![High-level architecture](docs/assets/kairos_arch_highlevel.png)
+
+---
+
+## Tech stack (100% free)
 
 | Layer | Tools |
 |---|---|
-| Agent Orchestration | LangGraph, LangChain |
-| LLM (Local) | Ollama + Llama 3.1 8B |
-| LLM (Cloud Fallback) | Groq API (14,400 free req/day) |
-| Causal Discovery | DYNOTEARS via causal-learn (CMU) |
-| Causal Inference | DoWhy (Microsoft Research) |
-| Anomaly Detection | Anomaly Transformer, Prophet |
-| Data Processing | Pandas, SQLAlchemy, DuckDB, Airbyte |
-| Vector Database | ChromaDB |
-| Backend | FastAPI, PostgreSQL, APScheduler |
-| Frontend | React, Recharts, Tailwind CSS |
-| Alert Delivery | Telegram Bot API, Gmail SMTP |
-| Deployment | Render.com (free), Vercel (free) |
+| Orchestration | LangGraph state machine, APScheduler |
+| API | FastAPI, Pydantic, optional API-key auth |
+| Storage | DuckDB (embedded, columnar, out-of-core) |
+| Ingestion | SQLAlchemy, DuckDB httpfs (S3/GCS/HTTPS), paramiko (SFTP), ftplib (FTP/FTPS), httpx (REST), gspread |
+| Anomaly detection | Seasonal robust z-score (MAD), Prophet |
+| Causal discovery | DYNOTEARS (own implementation), VARLiNGAM (causal-learn) & Granger fallbacks, DoWhy |
+| LLM | Groq free tier (`openai/gpt-oss-20b`) → local Ollama (`llama3.1:8b`) → grounded template |
+| Frontend | React 18, Vite, Tailwind CSS, Recharts, custom SVG causal graph |
+| Alerts | Telegram Bot API, Gmail SMTP |
+| Deployment | Docker (single container: API + dashboard), Render / Vercel free tiers |
 
 ---
 
-## Repository Structure
+## Repository structure
 
 ```
 kairos/
 ├── backend/
-│   ├── agents/
-│   │   ├── data_collector.py       # Agent 1
-│   │   ├── anomaly_watchman.py     # Agent 2
-│   │   ├── causal_investigator.py  # Agent 3
-│   │   ├── nl_reporter.py          # Agent 4
-│   │   └── messenger.py            # Agent 5
-│   ├── connectors/
-│   │   ├── sql_connector.py
-│   │   ├── sheets_connector.py
-│   │   └── csv_connector.py
-│   ├── models/
-│   │   ├── slac.py                 # Semantic Layer Auto-Construction
-│   │   ├── cbmg.py                 # Causal Business Metric Graph
-│   │   └── anomaly.py              # Detection pipeline
-│   ├── api/
-│   │   └── routes.py
-│   ├── main.py
-│   └── requirements.txt
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   └── App.jsx
-│   └── package.json
-├── notebooks/
-│   ├── 01_data_exploration.ipynb
-│   ├── 02_anomaly_detection.ipynb
-│   └── 03_causal_analysis.ipynb
-├── research/
-│   ├── literature_review.md
-│   └── gap_analysis.md
-├── data/
-│   └── sample/
-├── docs/
-│   ├── assets/
-│   └── architecture.png
-├── tests/
-│   └── test_connectors.py
-├── docker-compose.yml
-├── .env.example
-├── .gitignore
-└── README.md
+│   ├── agents/            data_collector · anomaly_watchman · causal_investigator · nl_reporter · messenger
+│   ├── connectors/        base (contract + mapping) · sql · file · sftp (SFTP/FTPS/FTP) · rest · sheets · registry
+│   ├── models/            anomaly (ensemble) · dynotears · cbmg · slac
+│   ├── services/          transfer (Fast Transfer) · ingest (files → metrics)
+│   ├── api/               routes (core) · sources · ingest (push, upload, transfer) · deps (auth)
+│   ├── demo/synthetic.py  multi-source data with known causal ground truth
+│   ├── config.py · db.py · pipeline.py · main.py · requirements.txt
+├── frontend/src/          Overview · Causal Analysis (CBMG graph) · Reports & Alerts · Data Sources · Fast Transfer
+├── edge_agent/            kairos_edge.py: aggregate locally & push KPIs, or fast-transfer files
+├── benchmark/             benchmark_ingestion.py + results/ (FTP vs Fast Transfer vs edge agent)
+├── scripts/               generate_demo_sources.py · demo_servers.py (FTP + REST demo systems)
+├── tests/                 connectors (real FTP & HTTP servers) · core · transfer · API end-to-end
+├── notebooks/             01 data exploration · 02 anomaly detection · 03 causal analysis
+├── research/              literature_review.md · gap_analysis.md
+├── docs/                  INGESTION.md (review answers) · API.md · assets/
+├── sources.example.yaml   every connector type, documented
+├── Dockerfile · docker-compose.yml · .env.example · LICENSE
 ```
 
 ---
 
-## Getting Started
+## Getting started
 
 ### Prerequisites
+- Python 3.11+ (tested on 3.13), Node.js 18+
+- Optional: [Ollama](https://ollama.com) for a local LLM, Docker
 
-- Python 3.11+
-- Node.js 18+
-- [Ollama](https://ollama.com) installed locally
-- Docker (optional)
-
-### 1. Clone the repository
-
+### 1. Configure
 ```bash
-git clone https://github.com/YOUR-USERNAME/kairos.git
-cd kairos
+cp .env.example .env          # all settings optional for a local demo
 ```
 
-### 2. Set up environment variables
-
+### 2. Backend
 ```bash
-cp .env.example .env
+python -m venv backend/venv
+backend\venv\Scripts\activate            # Windows   (source backend/venv/bin/activate on macOS/Linux)
+pip install -r backend/requirements.txt
+uvicorn backend.main:app --reload        # run from the repository root → http://127.0.0.1:8000/docs
 ```
 
-Edit `.env` and fill in:
-
-```env
-GROQ_API_KEY=your_groq_api_key_here
-TELEGRAM_BOT_TOKEN=your_telegram_bot_token
-TELEGRAM_CHAT_ID=your_chat_id
-DATABASE_URL=postgresql://user:password@localhost:5432/kairos
-```
-
-### 3. Install backend dependencies
-
+### 3. Frontend
 ```bash
-cd backend
-python -m venv venv
-venv\Scripts\activate        # Windows
-pip install -r requirements.txt
+cd frontend && npm install && npm run dev   # http://localhost:5173
 ```
 
-### 4. Pull the LLM model locally (free)
+### 4. See it work
+- **Quick:** click **Load demo data** on the Overview page. That loads 2 weeks of data from 4 sources, with incidents, and runs the pipeline.
+- **Live connectors:** follow the 5-minute demo in [`docs/INGESTION.md`](docs/INGESTION.md#7-live-demo-script-5-minutes):
+  ```bash
+  python scripts/generate_demo_sources.py   # ERP (SQLite), CSV exports, FTP drop, REST API + sources.yaml
+  python scripts/demo_servers.py            # FTP :2121 and REST :8090
+  ```
 
+### Docker (API + dashboard in one container)
 ```bash
-ollama pull llama3.1:8b
-ollama pull sqlcoder
+docker compose up --build                 # http://localhost:8000
+docker compose --profile demo up          # + a real SFTP server for the SFTP connector demo
 ```
 
-### 5. Install frontend dependencies
+### Optional: LLM reports and alerts
+- Free Groq key: [console.groq.com](https://console.groq.com) → `GROQ_API_KEY`
+- Local LLM: `ollama pull llama3.1:8b`
+- Telegram: message @BotFather → `/newbot` → `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`
 
-```bash
-cd frontend
-npm install
-```
-
-### 6. Run with Docker (easiest)
-
-```bash
-docker-compose up
-```
-
-### 7. Run manually
-
-```bash
-# Backend
-cd backend && uvicorn main:app --reload
-
-# Frontend
-cd frontend && npm run dev
-```
-
-Open [http://localhost:5173](http://localhost:5173)
+Without an LLM, KAIROS writes grounded template reports.
 
 ---
 
-## Free API Keys Needed
+## Data ingestion: "data can come from any source"
 
-| Service | How to Get | Cost |
-|---|---|---|
-| Groq API | [console.groq.com](https://console.groq.com) → Sign up | Free — no card |
-| Telegram Bot | Message @BotFather on Telegram → `/newbot` | Free — always |
-| Render.com | [render.com](https://render.com) → Sign up | Free tier |
-| Vercel | [vercel.com](https://vercel.com) → Sign up | Free tier |
+KAIROS **moves metrics, not datasets.** In short (full answer in [`docs/INGESTION.md`](docs/INGESTION.md)):
+
+- **5 protocol adapters**, not hundreds of product connectors. Configured, not coded; SLAC infers each new schema.
+- **SFTP/FTP supported** and kept fast: only new, compressed, small KPI files are fetched.
+- **Large data:**
+  - aggregation runs inside the source DB (SQL push-down)
+  - or next to the files (edge agent)
+  - or DuckDB reads only the needed Parquet columns from S3
+- **Large files that must move:** KAIROS Fast Transfer (chunked, parallel, compressed, resumable, SHA-256 verified).
+
+Benchmark on a 2M-row (≈106 MB) export: [`benchmark/results/results.md`](benchmark/results/results.md).
+
+```bash
+# push only KPIs from a huge local export
+python edge_agent/kairos_edge.py aggregate --input orders.csv.gz --ts-col created_at \
+    --metric amount:revenue:sum --count-metric orders --source store_42
+# or move the raw file fast
+python edge_agent/kairos_edge.py transfer --file warehouse.parquet --workers 8 --compress zstd --ingest
+```
 
 ---
 
-## Evaluation Datasets
+## Testing & benchmark
 
-| Dataset | Source | Use |
-|---|---|---|
-| Olist Brazil E-Commerce | [Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) | End-to-end pipeline evaluation |
-| Superstore Sales | [Tableau Public](https://public.tableau.com) | Multi-table analytics benchmark |
-| Northwind Database | Microsoft (open) | Classic business analytics |
+```bash
+python -m pytest tests -q                              # connectors, core, transfer, API end-to-end
+python benchmark/benchmark_ingestion.py --rows 2000000 --stream-mbps 50
+```
+
+The tests run a real FTP server and a real HTTP server, so they need no network access and send
+nothing to Telegram or the LLM.
+
+---
+
+## API
+
+Interactive docs are at `/docs`. Summary in [`docs/API.md`](docs/API.md).
+
+| Area | Endpoints |
+|---|---|
+| Pipeline | `POST /api/v1/pipeline/run` · `GET /pipeline/runs` · `GET /status` |
+| Metrics & anomalies | `GET /metrics` · `GET /metrics/{m}/series` · `GET /anomalies` · `POST /anomalies/detect` |
+| Causal & reports | `POST /investigate` · `GET /investigation/latest` · `POST /report` · `GET /alerts/history` |
+| Sources | `GET/POST /sources` · `POST /sources/test` · `POST /sources/{name}/sync` · `GET /connectors` |
+| Ingest | `POST /ingest` (push) · `POST /files` · `POST /files/{id}/ingest` |
+| Fast Transfer | `POST /transfer/start` · `PUT /transfer/{id}/chunk/{n}` · `GET /transfer/{id}` · `POST /transfer/{id}/complete` |
+
+---
+
+## Evaluation datasets
+
+| Dataset | Use |
+|---|---|
+| Synthetic multi-source KPIs with known causal graph (`backend/demo/synthetic.py`) | Detection + causal discovery accuracy (precision/recall/SHD) |
+| [Olist Brazil E-Commerce](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) | End-to-end on real raw orders: upload via Fast Transfer, and SLAC aggregates to KPIs |
+| Superstore Sales, Northwind | Multi-table analytics through the SQL connector |
 
 ---
 
 ## Research
 
-This project is submitted as Capstone Project-I at Woxsen University, School of Technology.
+Capstone Project-I, Woxsen University, School of Technology.
+Literature review and gap analysis: [`research/`](research/).
+**Target publication:** KDD 2027 Applied Data Science Track / VLDB 2027 Industrial Track.
 
-**Target publication:** KDD 2027 Applied Data Science Track / VLDB 2027 Industrial Track
-
-**Related papers:**
+Key papers:
 - [ReAct (ICLR 2023)](https://arxiv.org/abs/2210.03629)
-- [Anomaly Transformer (ICLR 2022)](https://arxiv.org/abs/2110.02642)
-- [AIDA (arXiv 2026)](https://arxiv.org/abs/2605.07202)
 - [DYNOTEARS (AISTATS 2020)](https://arxiv.org/abs/2002.00498)
+- [NOTEARS (NeurIPS 2018)](https://arxiv.org/abs/1803.01422)
+- [Anomaly Transformer (ICLR 2022)](https://arxiv.org/abs/2110.02642)
+- [LLM-Modulo (ICML 2024)](https://arxiv.org/abs/2402.01817)
+- [AIDA (arXiv 2026)](https://arxiv.org/abs/2605.07202)
 
 ---
 
@@ -256,11 +263,8 @@ This project is submitted as Capstone Project-I at Woxsen University, School of 
 - Varshini Yadav Nasaram
 - Obulagari Nandini
 
----
+Guided by **Dr. Rajkumar Kalimuthu**.
 
 ## License
 
-This project is licensed under the MIT License — see [LICENSE](LICENSE) for details.
-
----
-
+MIT; see [LICENSE](LICENSE).

@@ -52,6 +52,8 @@ Desktop.ini
 *.db
 *.sqlite
 *.sqlite3
+*.duckdb
+*.duckdb.wal
 
 # IDE
 .vscode/settings.json
@@ -68,3 +70,16 @@ logs/
 
 # Build outputs
 *.dist
+
+# KAIROS runtime data (generated)
+data/uploads/
+data/transfers/
+data/demo/
+sources.yaml
+config/sources.yaml
+.kairos_edge_state.json
+frontend/dist/
+.pytest_cache/
+
+# local database backups
+data/backup/

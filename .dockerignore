@@ -1,0 +1,11 @@
+backend/venv
+**/__pycache__
+frontend/node_modules
+frontend/dist
+data
+*.duckdb
+*.duckdb.wal
+.env
+.git
+notebooks
+docs
